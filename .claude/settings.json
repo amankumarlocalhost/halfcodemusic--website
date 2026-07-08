@@ -3,7 +3,10 @@
     "allow": [
       "PowerShell(node --version)",
       "PowerShell(npm --version)",
-      "Bash(npx --yes create-next-app@latest . --ts --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --use-npm --yes)"
+      "Bash(npx --yes create-next-app@latest . --ts --tailwind --eslint --app --no-src-dir --import-alias \"@/*\" --use-npm --yes)",
+      "Bash(npm install *)",
+      "Bash(rm -f public/next.svg public/vercel.svg public/file.svg public/globe.svg public/window.svg)",
+      "Bash(npm run *)"
     ]
   }
 }

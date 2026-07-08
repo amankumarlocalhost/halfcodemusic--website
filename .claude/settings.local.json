@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(netstat -ano)",
+      "Bash(ls *.ts *.mjs *.json)",
+      "Bash(cat next.config.ts eslint.config.mjs tsconfig.json)",
+      "Bash(npm run *)"
+    ]
+  }
+}
