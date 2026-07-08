@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { AudioLines, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { navLinks, site } from "@/lib/site";
 
 export default function Navbar() {
@@ -30,12 +31,22 @@ export default function Navbar() {
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 sm:h-20">
         <a
           href="#home"
-          className="flex items-center gap-2 font-display text-lg font-bold tracking-tight"
+          className="group flex items-center gap-2.5 font-display text-lg font-bold tracking-tight"
         >
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-600/20 text-violet-400">
-            <AudioLines className="h-4.5 w-4.5" />
+          <Image
+            src="/logo.svg"
+            alt=""
+            width={36}
+            height={36}
+            className="h-9 w-9 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-shadow duration-300 group-hover:shadow-[0_0_32px_rgba(139,92,246,0.7)]"
+            priority
+          />
+          <span>
+            HalfCode
+            <span className="bg-gradient-to-r from-violet-400 to-fuchsia-400 bg-clip-text text-transparent">
+              Music
+            </span>
           </span>
-          {site.name}
         </a>
 
         <ul className="hidden items-center gap-8 md:flex">
@@ -43,7 +54,7 @@ export default function Navbar() {
             <li key={link.href}>
               <a
                 href={link.href}
-                className="text-sm text-white/60 transition-colors duration-200 hover:text-white"
+                className="relative text-sm text-white/60 transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-gradient-to-r after:from-violet-400 after:to-fuchsia-400 after:transition-all after:duration-300 hover:text-white hover:after:w-full"
               >
                 {link.label}
               </a>
@@ -52,7 +63,7 @@ export default function Navbar() {
           <li>
             <a
               href="#music"
-              className="rounded-full bg-violet-600 px-5 py-2 text-sm font-semibold transition-all duration-300 hover:bg-violet-500 hover:shadow-[0_0_24px_rgba(139,92,246,0.5)]"
+              className="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-2 text-sm font-semibold shadow-[0_0_20px_rgba(139,92,246,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_32px_rgba(217,70,239,0.5)]"
             >
               Listen Now
             </a>
@@ -84,6 +95,15 @@ export default function Navbar() {
                 </a>
               </li>
             ))}
+            <li className="pt-2">
+              <a
+                href="#music"
+                onClick={() => setOpen(false)}
+                className="block rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-center font-semibold shadow-[0_0_20px_rgba(139,92,246,0.35)]"
+              >
+                Listen Now
+              </a>
+            </li>
           </ul>
         </div>
       )}

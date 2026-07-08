@@ -1,30 +1,40 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Music2, Disc3, Play, ArrowDown } from "lucide-react";
+import { Music2, Disc3, Play, ArrowRight, Sparkles } from "lucide-react";
 import Button from "@/components/ui/Button";
-import { site } from "@/lib/site";
+import { site, latestRelease } from "@/lib/site";
 
 /** Slow-drifting blurred gradient orbs behind the hero content. */
 function GradientBackdrop({ animate }) {
   return (
     <div aria-hidden className="absolute inset-0 overflow-hidden">
       <motion.div
-        className="absolute -top-40 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-violet-600/25 blur-[120px]"
+        className="absolute -top-40 left-1/2 h-[36rem] w-[36rem] -translate-x-1/2 rounded-full bg-violet-600/30 blur-[120px]"
         animate={animate ? { scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] } : undefined}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute top-1/3 -left-40 h-96 w-96 rounded-full bg-fuchsia-600/15 blur-[110px]"
+        className="absolute top-1/3 -left-40 h-96 w-96 rounded-full bg-fuchsia-600/20 blur-[110px]"
         animate={animate ? { x: [0, 60, 0], y: [0, -40, 0] } : undefined}
         transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-indigo-600/15 blur-[110px]"
+        className="absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-indigo-600/20 blur-[110px]"
         animate={animate ? { x: [0, -50, 0], y: [0, 30, 0] } : undefined}
         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
       />
     </div>
+  );
+}
+
+/** Faint grid that fades out toward the edges. */
+function GridBackdrop() {
+  return (
+    <div
+      aria-hidden
+      className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:72px_72px] [mask-image:radial-gradient(ellipse_65%_60%_at_50%_40%,black,transparent)]"
+    />
   );
 }
 
@@ -53,6 +63,35 @@ function FloatingShapes({ animate }) {
   );
 }
 
+/** Full-width animated waveform along the bottom of the hero. */
+function Waveform({ animate }) {
+  const bars = Array.from({ length: 40 }, (_, i) =>
+    14 + Math.round(34 * Math.abs(Math.sin(i * 0.55)))
+  );
+
+  return (
+    <div
+      aria-hidden
+      className="absolute inset-x-0 bottom-8 flex h-16 items-end justify-center gap-1 opacity-70 [mask-image:linear-gradient(to_right,transparent,black_25%,black_75%,transparent)] sm:gap-1.5"
+    >
+      {bars.map((height, i) => (
+        <motion.span
+          key={i}
+          className="w-1 origin-bottom rounded-full bg-gradient-to-t from-violet-600/80 to-fuchsia-400/80 sm:w-1.5"
+          style={{ height }}
+          animate={animate ? { scaleY: [1, 0.3, 1] } : undefined}
+          transition={{
+            duration: 1.3 + (i % 4) * 0.25,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: i * 0.07,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default function Hero() {
   const reduceMotion = useReducedMotion();
   const animate = !reduceMotion;
@@ -63,6 +102,7 @@ export default function Hero() {
       className="relative flex min-h-svh flex-col items-center justify-center px-6 text-center"
     >
       <GradientBackdrop animate={animate} />
+      <GridBackdrop />
       <FloatingShapes animate={animate} />
 
       <motion.div
@@ -71,16 +111,24 @@ export default function Hero() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9, ease: [0.21, 0.47, 0.32, 0.98] }}
       >
-        <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-widest text-white/60 uppercase backdrop-blur-md">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-violet-500" />
-          {site.tagline}
-        </span>
+        <a
+          href="#music"
+          className="group mb-8 inline-flex items-center gap-2 rounded-full border border-violet-500/40 bg-violet-600/10 px-5 py-2 text-xs font-medium text-violet-200 backdrop-blur-md transition-all duration-300 hover:border-fuchsia-400/60 hover:bg-violet-600/20 hover:shadow-[0_0_28px_rgba(139,92,246,0.35)] sm:text-sm"
+        >
+          <Sparkles className="h-3.5 w-3.5 text-fuchsia-300" />
+          New Release — {latestRelease.title}
+          <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+        </a>
 
-        <h1 className="font-display text-5xl leading-[1.05] font-bold tracking-tight sm:text-7xl lg:text-8xl">
-          Half<span className="bg-gradient-to-r from-violet-400 via-violet-500 to-fuchsia-500 bg-clip-text text-transparent">Code</span>Music
+        <h1 className="font-display text-5xl leading-[1.05] font-bold tracking-tight drop-shadow-[0_0_40px_rgba(139,92,246,0.35)] sm:text-7xl lg:text-8xl">
+          <span className="text-shimmer">HalfCodeMusic</span>
         </h1>
 
-        <p className="mx-auto mt-8 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
+        <p className="mt-6 text-xs font-semibold tracking-[0.35em] text-violet-300/80 uppercase sm:text-sm">
+          {site.tagline}
+        </p>
+
+        <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
           {site.description}
         </p>
 
@@ -89,21 +137,13 @@ export default function Hero() {
             <Play className="h-4 w-4 fill-current" />
             Listen Now
           </Button>
-          <Button href="#about" variant="ghost">
+          <Button href="#connect" variant="ghost">
             Explore Music
           </Button>
         </div>
       </motion.div>
 
-      <motion.a
-        href="#music"
-        aria-label="Scroll to latest release"
-        className="absolute bottom-8 text-white/30 transition-colors hover:text-white/70"
-        animate={animate ? { y: [0, 8, 0] } : undefined}
-        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-      >
-        <ArrowDown className="h-5 w-5" />
-      </motion.a>
+      <Waveform animate={animate} />
     </section>
   );
 }
