@@ -39,7 +39,7 @@ export default function Navbar() {
             width={36}
             height={36}
             className="h-9 w-9 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-shadow duration-300 group-hover:shadow-[0_0_32px_rgba(139,92,246,0.7)]"
-            priority
+            preload
           />
           <span>
             HalfCode

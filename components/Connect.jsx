@@ -24,7 +24,7 @@ export default function Connect() {
         </Reveal>
 
         <Reveal delay={0.15}>
-          <div className="relative mt-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] px-8 py-12 backdrop-blur-md">
+          <div className="relative mt-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] px-6 py-10 backdrop-blur-md sm:px-8 sm:py-12">
             {/* soft glow inside the card */}
             <div
               aria-hidden

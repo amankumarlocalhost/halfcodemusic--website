@@ -99,7 +99,7 @@ export default function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-svh flex-col items-center justify-center px-6 text-center"
+      className="relative flex min-h-svh flex-col items-center justify-center px-6 pt-24 pb-32 text-center"
     >
       <GradientBackdrop animate={animate} />
       <GridBackdrop />
@@ -113,18 +113,18 @@ export default function Hero() {
       >
         <a
           href="#music"
-          className="group mb-8 inline-flex items-center gap-2 rounded-full border border-violet-500/40 bg-violet-600/10 px-5 py-2 text-xs font-medium text-violet-200 backdrop-blur-md transition-all duration-300 hover:border-fuchsia-400/60 hover:bg-violet-600/20 hover:shadow-[0_0_28px_rgba(139,92,246,0.35)] sm:text-sm"
+          className="group mb-8 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-violet-500/40 bg-violet-600/10 px-4 py-2 text-xs font-medium text-violet-200 backdrop-blur-md transition-all duration-300 hover:border-fuchsia-400/60 hover:bg-violet-600/20 hover:shadow-[0_0_28px_rgba(139,92,246,0.35)] sm:px-5 sm:text-sm"
         >
           <Sparkles className="h-3.5 w-3.5 text-fuchsia-300" />
           New Release — {latestRelease.title}
           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
         </a>
 
-        <h1 className="font-display text-5xl leading-[1.05] font-bold tracking-tight drop-shadow-[0_0_40px_rgba(139,92,246,0.35)] sm:text-7xl lg:text-8xl">
+        <h1 className="font-display text-[clamp(2.1rem,10.5vw,3rem)] leading-[1.05] font-bold tracking-tight drop-shadow-[0_0_40px_rgba(139,92,246,0.35)] sm:text-7xl lg:text-8xl">
           <span className="text-shimmer">HalfCodeMusic</span>
         </h1>
 
-        <p className="mt-6 text-xs font-semibold tracking-[0.35em] text-violet-300/80 uppercase sm:text-sm">
+        <p className="mt-6 text-[10px] font-semibold tracking-[0.22em] text-violet-300/80 uppercase sm:text-sm sm:tracking-[0.35em]">
           {site.tagline}
         </p>
 
@@ -132,13 +132,13 @@ export default function Hero() {
           {site.description}
         </p>
 
-        <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button href="#music">
+        <div className="mt-10 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
+          <Button href="#music" className="w-full max-w-xs sm:w-auto sm:max-w-none">
             <Play className="h-4 w-4 fill-current" />
             Listen Now
           </Button>
-          <Button href="#connect" variant="ghost">
-            Explore Music
+          <Button href="#connect" variant="ghost" className="w-full max-w-xs sm:w-auto sm:max-w-none">
+            Let&apos;s Connect
           </Button>
         </div>
       </motion.div>

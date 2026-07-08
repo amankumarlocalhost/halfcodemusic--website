@@ -33,13 +33,13 @@ export default function LatestRelease() {
                 alt={`${latestRelease.title} — album artwork`}
                 width={1280}
                 height={720}
+                sizes="(min-width: 1024px) 36rem, 92vw"
                 className="h-auto w-full transition-transform duration-700 group-hover:scale-105"
-                priority
               />
               {/* play overlay on hover */}
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100">
-                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_0_48px_rgba(139,92,246,0.8)]">
-                  <Play className="ml-1 h-8 w-8 fill-current text-white" />
+              <div className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100">
+                <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 shadow-[0_0_48px_rgba(139,92,246,0.8)] sm:h-20 sm:w-20">
+                  <Play className="ml-1 h-6 w-6 fill-current text-white sm:h-8 sm:w-8" />
                 </span>
               </div>
             </div>
@@ -52,7 +52,7 @@ export default function LatestRelease() {
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-fuchsia-400" />
               Latest Release
             </span>
-            <h2 className="font-display mt-5 text-4xl font-bold tracking-tight sm:text-6xl">
+            <h2 className="font-display mt-5 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
               <span className="bg-gradient-to-r from-white via-violet-100 to-violet-300 bg-clip-text text-transparent">
                 {latestRelease.title}
               </span>
@@ -85,7 +85,7 @@ export default function LatestRelease() {
                 href={latestRelease.links.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_0_36px_rgba(139,92,246,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_56px_rgba(217,70,239,0.6)]"
+                className="inline-flex w-full max-w-xs items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_0_36px_rgba(139,92,246,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_56px_rgba(217,70,239,0.6)] sm:w-auto sm:max-w-none"
               >
                 <YoutubeIcon className="h-5 w-5" />
                 Watch on YouTube
