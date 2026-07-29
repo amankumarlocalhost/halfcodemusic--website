@@ -12,24 +12,28 @@ const socials = [
 
 export default function Connect() {
   return (
-    <section id="connect" className="relative px-6 py-28 sm:py-36">
-      <div className="mx-auto max-w-3xl text-center">
+    <section id="connect" className="relative overflow-hidden px-6 py-28 sm:py-36">
+      {/* ambient glow behind the card */}
+      <div
+        aria-hidden
+        className="absolute bottom-0 left-1/2 h-80 w-[40rem] -translate-x-1/2 translate-y-1/2 rounded-full bg-violet-400/20 blur-[120px]"
+      />
+
+      <div className="relative mx-auto max-w-3xl text-center">
         <Reveal>
           <h2 className="font-display text-4xl font-bold tracking-tight sm:text-5xl">
-            Let&apos;s Connect
+            Let&apos;s{" "}
+            <span className="bg-gradient-to-r from-accent to-neon bg-clip-text text-transparent">
+              Connect
+            </span>
           </h2>
-          <p className="mt-5 text-white/50">
-            Follow the journey, stream the sound, or just say hi.
+          <p className="mt-5 text-dim">
+            Follow the journey, stream the sound, or reach out for collaborations.
           </p>
         </Reveal>
 
         <Reveal delay={0.15}>
-          <div className="relative mt-12 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] px-6 py-10 backdrop-blur-md sm:px-8 sm:py-12">
-            {/* soft glow inside the card */}
-            <div
-              aria-hidden
-              className="absolute -top-24 left-1/2 h-48 w-96 -translate-x-1/2 rounded-full bg-violet-600/20 blur-[80px]"
-            />
+          <div className="glass relative mt-12 overflow-hidden rounded-3xl px-6 py-10 sm:px-8 sm:py-12">
             <div className="relative flex flex-wrap items-start justify-center gap-8">
               {socials.map(({ label, href, Icon }) => (
                 <motion.a
@@ -42,10 +46,10 @@ export default function Connect() {
                   transition={{ type: "spring", stiffness: 320, damping: 18 }}
                   className="group flex flex-col items-center gap-3"
                 >
-                  <span className="flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/5 transition-all duration-300 group-hover:border-violet-500/60 group-hover:bg-violet-600/15 group-hover:shadow-[0_0_32px_rgba(139,92,246,0.4)]">
-                    <Icon className="h-6 w-6 text-white/60 transition-colors duration-300 group-hover:text-violet-300" />
+                  <span className="glass flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-300 group-hover:border-violet-500/50 group-hover:bg-violet-500/10 group-hover:shadow-[0_0_32px_rgba(124,58,237,0.25)]">
+                    <Icon className="h-6 w-6 text-ink/60 transition-colors duration-300 group-hover:text-violet-600" />
                   </span>
-                  <span className="text-xs font-medium text-white/40 transition-colors duration-300 group-hover:text-white/80">
+                  <span className="text-xs font-medium text-dim transition-colors duration-300 group-hover:text-ink">
                     {label}
                   </span>
                 </motion.a>

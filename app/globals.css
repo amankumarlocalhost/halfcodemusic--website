@@ -1,14 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #000000;
-  --color-foreground: #ffffff;
-  --color-accent: #8b5cf6;
+  /* Premium light theme — white / soft lavender with violet + cyan accents */
+  --color-paper: #faf9fc;
+  --color-ink: #18181f;
+  --color-dim: #5b5b68;
+  --color-accent: #7c3aed;
+  --color-neon: #0891b2;
   --font-sans: var(--font-inter);
   --font-display: var(--font-space-grotesk);
 }
 
 html {
+  /* Tell the browser this is a light page so it never auto-darkens colors */
+  color-scheme: light;
   scroll-behavior: smooth;
   /* keep anchored sections clear of the fixed navbar */
   scroll-padding-top: 5.5rem;
@@ -16,33 +21,42 @@ html {
 
 body {
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 58, 237, 0.16), transparent 70%),
-    #060310;
-  color: #ffffff;
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 58, 237, 0.1), transparent 70%),
+    #faf9fc;
+  color: #18181f;
   font-family: var(--font-inter), system-ui, sans-serif;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: rgba(139, 92, 246, 0.4);
-  color: #ffffff;
+  background: rgba(124, 58, 237, 0.3);
+  color: #18181f;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #060310;
+  background: #f0eff5;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(139, 92, 246, 0.35);
+  background: rgba(124, 58, 237, 0.35);
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(139, 92, 246, 0.6);
+  background: rgba(124, 58, 237, 0.6);
 }
 
-/* Sweeping light across gradient text */
+/* Frosted-glass surface used for cards, nav and menus */
+.glass {
+  border: 1px solid rgba(24, 24, 31, 0.08);
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  box-shadow: 0 4px 24px rgba(24, 24, 31, 0.05);
+}
+
+/* Sweeping light across gradient headline text */
 @keyframes shimmer {
   to {
     background-position: -200% center;
@@ -52,17 +66,17 @@ body {
 .text-shimmer {
   background-image: linear-gradient(
     110deg,
-    #ffffff 20%,
-    #c4b5fd 35%,
-    #e879f9 50%,
-    #a5b4fc 65%,
-    #ffffff 80%
+    #18181f 20%,
+    #7c3aed 35%,
+    #c026d3 50%,
+    #4f46e5 65%,
+    #18181f 80%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: shimmer 5s linear infinite;
+  animation: shimmer 6s linear infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
