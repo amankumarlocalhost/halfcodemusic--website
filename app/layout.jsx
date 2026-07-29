@@ -58,6 +58,9 @@ export const metadata = {
     description: site.description,
     images: [latestRelease.cover],
   },
+  verification: {
+    google: "D1FqyoJiJ7CejLKJRsoGglSLOdDXe-ANEFq2ZqZ1icw",
+  },
   robots: {
     index: true,
     follow: true,
