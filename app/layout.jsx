@@ -1,6 +1,10 @@
 import { Inter, Space_Grotesk } from "next/font/google";
 import Loader from "@/components/Loader";
-import { site, latestRelease } from "@/lib/site";
+import { PlayerProvider } from "@/components/player/PlayerProvider";
+import PlayerBar from "@/components/player/PlayerBar";
+import { site } from "@/lib/site";
+import { featuredRelease } from "@/data/music";
+import { socialLinks } from "@/data/social";
 import "./globals.css";
 
 const inter = Inter({
@@ -26,12 +30,13 @@ export const metadata = {
   description: site.description,
   keywords: [
     "HalfCodeMusic",
-    "music producer",
+    "HalfCode Music",
+    "independent music producer",
     "cinematic music",
     "romantic songs",
     "Hindi melody",
-    "Teri Payal",
-    latestRelease.title,
+    "original music",
+    featuredRelease.title,
   ],
   alternates: {
     canonical: "/",
@@ -45,10 +50,10 @@ export const metadata = {
     locale: "en_US",
     images: [
       {
-        url: latestRelease.cover,
+        url: featuredRelease.cover,
         width: 1280,
-        height: 720,
-        alt: `${latestRelease.title} — album artwork`,
+        height: 1280,
+        alt: `${featuredRelease.title} — album artwork`,
       },
     ],
   },
@@ -56,7 +61,7 @@ export const metadata = {
     card: "summary_large_image",
     title,
     description: site.description,
-    images: [latestRelease.cover],
+    images: [featuredRelease.cover],
   },
   verification: {
     google: "D1FqyoJiJ7CejLKJRsoGglSLOdDXe-ANEFq2ZqZ1icw",
@@ -79,7 +84,7 @@ export const viewport = {
   initialScale: 1,
 };
 
-/** Schema.org structured data: the artist and the latest recording. */
+/** Schema.org structured data: the artist, primary channels and the site itself. */
 const jsonLd = {
   "@context": "https://schema.org",
   "@graph": [
@@ -90,19 +95,14 @@ const jsonLd = {
       description: site.description,
       url: site.url,
       logo: `${site.url}/logo.svg`,
-      sameAs: Object.values(site.links),
-    },
-    {
-      "@type": "MusicRecording",
-      name: latestRelease.title,
-      byArtist: { "@id": `${site.url}/#artist` },
-      image: `${site.url}${latestRelease.cover}`,
-      url: latestRelease.links.youtube,
+      sameAs: socialLinks.map((s) => s.href),
     },
     {
       "@type": "WebSite",
+      "@id": `${site.url}/#website`,
       name: site.name,
       url: site.url,
+      publisher: { "@id": `${site.url}/#artist` },
     },
   ],
 };
@@ -111,12 +111,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}>
       <body>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-        />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
         <Loader />
-        {children}
+        <PlayerProvider>
+          {children}
+          <PlayerBar />
+        </PlayerProvider>
       </body>
     </html>
   );

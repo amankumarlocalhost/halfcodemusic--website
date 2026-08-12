@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
-import { stats } from "@/lib/site";
+import { stats } from "@/data/artist";
 
 /** Counts from 0 to `value` once the number scrolls into view. */
 function Counter({ value, suffix }) {
@@ -32,11 +32,11 @@ function Counter({ value, suffix }) {
 
 export default function Stats() {
   return (
-    <section id="about" aria-label="HalfCodeMusic in numbers" className="relative px-6 py-20 sm:py-24">
+    <section aria-label="HalfCodeMusic in numbers" className="relative px-6 py-20 sm:py-24">
       <div className="mx-auto max-w-6xl">
         <Reveal>
           <div className="glass grid grid-cols-1 gap-px overflow-hidden rounded-3xl sm:grid-cols-3">
-            {stats.map(({ label, value, suffix }, i) => (
+            {stats.map(({ label, value, suffix }) => (
               <motion.div
                 key={label}
                 whileHover={{ backgroundColor: "rgba(139,92,246,0.08)" }}
@@ -47,9 +47,7 @@ export default function Stats() {
                     <Counter value={value} suffix={suffix} />
                   </span>
                 </span>
-                <span className="text-xs font-medium tracking-[0.15em] text-dim uppercase">
-                  {label}
-                </span>
+                <span className="text-xs font-medium tracking-[0.15em] text-dim uppercase">{label}</span>
               </motion.div>
             ))}
           </div>

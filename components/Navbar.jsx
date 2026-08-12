@@ -2,13 +2,17 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import { navLinks, site } from "@/lib/site";
+import { navLinks } from "@/lib/site";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const [prevPathname, setPrevPathname] = useState(pathname);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -17,54 +21,59 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  if (pathname !== prevPathname) {
+    setPrevPathname(pathname);
+    setOpen(false);
+  }
+
+  const isActive = (href) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
+
   return (
     <motion.header
       initial={{ y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "glass border-x-0 border-t-0" : "border-b border-transparent"
+        scrolled || open ? "glass border-x-0 border-t-0" : "border-b border-transparent"
       }`}
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 sm:h-20">
-        <a
-          href="#home"
-          className="group flex items-center gap-2.5 font-display text-lg font-bold tracking-tight"
-        >
+        <Link href="/" className="group flex items-center gap-2.5 font-display text-lg font-bold tracking-tight">
           <Image
             src="/logo.svg"
             alt=""
             width={36}
             height={36}
             className="h-9 w-9 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-shadow duration-300 group-hover:shadow-[0_0_32px_rgba(34,211,238,0.5)]"
-            preload
+            priority
           />
           <span>
             HalfCode
-            <span className="bg-gradient-to-r from-accent to-neon bg-clip-text text-transparent">
-              Music
-            </span>
+            <span className="bg-gradient-to-r from-accent to-neon bg-clip-text text-transparent">Music</span>
           </span>
-        </a>
+        </Link>
 
         <ul className="hidden items-center gap-8 md:flex">
           {navLinks.map((link) => (
             <li key={link.href}>
-              <a
+              <Link
                 href={link.href}
-                className="relative text-sm text-dim transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-gradient-to-r after:from-accent after:to-neon after:transition-all after:duration-300 hover:text-ink hover:after:w-full"
+                aria-current={isActive(link.href) ? "page" : undefined}
+                className={`relative text-sm transition-colors duration-200 after:absolute after:-bottom-1.5 after:left-0 after:h-px after:bg-gradient-to-r after:from-accent after:to-neon after:transition-all after:duration-300 hover:text-ink hover:after:w-full ${
+                  isActive(link.href) ? "text-ink after:w-full" : "text-dim after:w-0"
+                }`}
               >
                 {link.label}
-              </a>
+              </Link>
             </li>
           ))}
           <li>
-            <a
-              href="#music"
+            <Link
+              href="/music"
               className="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_32px_rgba(124,58,237,0.45)]"
             >
               Listen Now
-            </a>
+            </Link>
           </li>
         </ul>
 
@@ -91,23 +100,32 @@ export default function Navbar() {
             <ul className="flex flex-col gap-1 px-6 py-4">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <a
+                  <Link
                     href={link.href}
-                    onClick={() => setOpen(false)}
-                    className="block rounded-lg px-3 py-3 text-ink/70 transition-colors hover:bg-ink/5 hover:text-ink"
+                    aria-current={isActive(link.href) ? "page" : undefined}
+                    className={`block rounded-lg px-3 py-3 transition-colors hover:bg-ink/5 hover:text-ink ${
+                      isActive(link.href) ? "text-ink" : "text-ink/70"
+                    }`}
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
               <li className="pt-2">
-                <a
-                  href="#music"
-                  onClick={() => setOpen(false)}
+                <Link
+                  href="/contact"
+                  className="block rounded-lg px-3 py-3 text-ink/70 transition-colors hover:bg-ink/5 hover:text-ink"
+                >
+                  Contact
+                </Link>
+              </li>
+              <li className="pt-2">
+                <Link
+                  href="/music"
                   className="block rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-center font-semibold text-white shadow-[0_0_20px_rgba(124,58,237,0.3)]"
                 >
                   Listen Now
-                </a>
+                </Link>
               </li>
             </ul>
           </motion.div>

@@ -1,0 +1,28 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import Reveal from "@/components/ui/Reveal";
+
+export default function ContactCTA() {
+  return (
+    <section aria-labelledby="contact-cta-heading" className="relative overflow-hidden px-6 py-28 sm:py-32">
+      <div
+        aria-hidden
+        className="absolute top-1/2 left-1/2 h-72 w-[36rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-violet-600/10 blur-[130px]"
+      />
+      <Reveal className="relative mx-auto max-w-2xl text-center">
+        <h2 id="contact-cta-heading" className="font-display text-3xl font-bold tracking-tight sm:text-4xl">
+          Have a collaboration or{" "}
+          <span className="bg-gradient-to-r from-accent to-neon bg-clip-text text-transparent">production inquiry?</span>
+        </h2>
+        <p className="mt-4 text-dim">Reach out — I read every message.</p>
+        <Link
+          href="/contact"
+          className="group mt-8 inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_0_36px_rgba(139,92,246,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_56px_rgba(139,92,246,0.65)]"
+        >
+          Get in touch
+          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+        </Link>
+      </Reveal>
+    </section>
+  );
+}
