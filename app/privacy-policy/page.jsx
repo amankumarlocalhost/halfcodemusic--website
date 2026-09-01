@@ -62,7 +62,7 @@ export default function PrivacyPolicyPage() {
             <section>
               <h2 className="font-display text-xl font-semibold text-ink">Contact</h2>
               <p className="mt-3">
-                Questions about this policy can be sent through the <a href="/contact" className="text-violet-700 underline underline-offset-2">contact page</a>.
+                Questions about this policy can be sent through the <a href="/contact" className="text-dim underline underline-offset-2">contact page</a>.
                 <em> [Placeholder — add a dedicated privacy contact email once available.]</em>
               </p>
             </section>

@@ -60,7 +60,7 @@ export default function TermsPage() {
             <section>
               <h2 className="font-display text-xl font-semibold text-ink">Contact</h2>
               <p className="mt-3">
-                Questions about these terms can be sent through the <a href="/contact" className="text-violet-700 underline underline-offset-2">contact page</a>.
+                Questions about these terms can be sent through the <a href="/contact" className="text-dim underline underline-offset-2">contact page</a>.
               </p>
             </section>
           </div>

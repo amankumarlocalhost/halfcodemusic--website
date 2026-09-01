@@ -28,7 +28,7 @@ export default function VideoModal({ video, onClose }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/80 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-ink/80 px-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label={video.title}
@@ -47,7 +47,7 @@ export default function VideoModal({ video, onClose }) {
               type="button"
               onClick={onClose}
               aria-label="Close video"
-              className="absolute -top-11 right-0 flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+              className="absolute -top-11 right-0 flex h-9 w-9 items-center justify-center rounded-full bg-ivory/10 text-ivory transition-colors hover:bg-ivory/20"
             >
               <X className="h-5 w-5" />
             </button>

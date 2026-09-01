@@ -49,13 +49,13 @@ export default function ContactForm() {
   if (status === "success") {
     return (
       <div className="glass flex flex-col items-center gap-3 rounded-3xl px-8 py-14 text-center">
-        <CheckCircle2 className="h-10 w-10 text-emerald-500" />
+        <CheckCircle2 className="h-10 w-10 text-success" />
         <p className="font-display text-lg font-semibold text-ink">Message sent</p>
         <p className="text-sm text-dim">Thanks for reaching out — I&apos;ll get back to you soon.</p>
         <button
           type="button"
           onClick={() => setStatus("idle")}
-          className="mt-2 text-sm font-semibold text-violet-700 transition-colors hover:text-violet-800"
+          className="mt-2 text-sm font-semibold text-dim transition-colors hover:text-dim"
         >
           Send another message
         </button>
@@ -89,7 +89,7 @@ export default function ContactForm() {
             minLength={2}
             value={values.name}
             onChange={update("name")}
-            className="w-full rounded-xl border border-ink/10 bg-white/60 px-4 py-3 text-sm text-ink placeholder:text-ink/30 focus:border-violet-500/50 focus:outline-none"
+            className="w-full rounded-xl border border-line bg-ivory/80 px-4 py-3 text-sm text-ink placeholder:text-ink/45 focus:border-stone focus:outline-none"
             placeholder="Your name"
           />
         </div>
@@ -103,7 +103,7 @@ export default function ContactForm() {
             required
             value={values.email}
             onChange={update("email")}
-            className="w-full rounded-xl border border-ink/10 bg-white/60 px-4 py-3 text-sm text-ink placeholder:text-ink/30 focus:border-violet-500/50 focus:outline-none"
+            className="w-full rounded-xl border border-line bg-ivory/80 px-4 py-3 text-sm text-ink placeholder:text-ink/45 focus:border-stone focus:outline-none"
             placeholder="you@example.com"
           />
         </div>
@@ -117,7 +117,7 @@ export default function ContactForm() {
           id="inquiryType"
           value={values.inquiryType}
           onChange={update("inquiryType")}
-          className="w-full rounded-xl border border-ink/10 bg-white/60 px-4 py-3 text-sm text-ink focus:border-violet-500/50 focus:outline-none"
+          className="w-full rounded-xl border border-line bg-ivory/80 px-4 py-3 text-sm text-ink focus:border-stone focus:outline-none"
         >
           {inquiryOptions.map((opt) => (
             <option key={opt.value} value={opt.value}>
@@ -138,13 +138,13 @@ export default function ContactForm() {
           rows={5}
           value={values.message}
           onChange={update("message")}
-          className="w-full resize-none rounded-xl border border-ink/10 bg-white/60 px-4 py-3 text-sm text-ink placeholder:text-ink/30 focus:border-violet-500/50 focus:outline-none"
+          className="w-full resize-none rounded-xl border border-line bg-ivory/80 px-4 py-3 text-sm text-ink placeholder:text-ink/45 focus:border-stone focus:outline-none"
           placeholder="Tell me a little about what you have in mind..."
         />
       </div>
 
       {status === "error" && (
-        <p role="alert" className="flex items-center gap-2 text-sm text-red-600">
+        <p role="alert" className="flex items-center gap-2 text-sm text-error">
           <TriangleAlert className="h-4 w-4 shrink-0" />
           {error}
         </p>
@@ -153,7 +153,7 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === "loading"}
-        className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-8 py-4 text-sm font-semibold text-white shadow-[0_0_36px_rgba(139,92,246,0.5)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_56px_rgba(139,92,246,0.65)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 sm:w-auto"
+        className="inline-flex w-full items-center justify-center gap-2.5 rounded-full bg-ink hover:bg-deep-soft px-8 py-4 text-sm font-semibold text-ivory shadow-[0_2px_12px_rgba(37,39,36,0.10)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(37,39,36,0.16)] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0 sm:w-auto"
       >
         {status === "loading" && <Loader2 className="h-4 w-4 animate-spin" />}
         {status === "loading" ? "Sending..." : "Send Message"}

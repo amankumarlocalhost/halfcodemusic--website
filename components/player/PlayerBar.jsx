@@ -70,10 +70,10 @@ export default function PlayerBar() {
                 type="button"
                 onClick={toggle}
                 aria-label={isPlaying ? "Pause" : "Play"}
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.45)] transition-transform hover:-translate-y-0.5"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink hover:bg-deep-soft text-ivory shadow-[0_2px_10px_rgba(37,39,36,0.10)] transition-transform hover:-translate-y-0.5"
               >
                 {isBuffering ? (
-                  <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/40 border-t-white" />
+                  <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-ivory/40 border-t-ivory" />
                 ) : isPlaying ? (
                   <Pause className="h-4 w-4 fill-current" />
                 ) : (
@@ -118,7 +118,7 @@ export default function PlayerBar() {
                 />
                 <span
                   style={{ left: `${progress * 100}%` }}
-                  className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white opacity-0 shadow transition-opacity group-hover:opacity-100"
+                  className="absolute top-1/2 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-ivory opacity-0 shadow transition-opacity group-hover:opacity-100"
                 />
               </div>
               <span className="w-10 shrink-0 text-xs tabular-nums text-dim">{formatTime(duration)}</span>
@@ -133,7 +133,7 @@ export default function PlayerBar() {
                 value={volume}
                 onChange={(e) => setVolume(Number(e.target.value))}
                 aria-label="Volume"
-                className="h-1 w-20 accent-violet-600"
+                className="h-1 w-20 accent-ink"
               />
             </div>
           </div>

@@ -20,7 +20,7 @@ export default function PlayButton({ track, queue = [], size = "md", className =
         isActive ? toggle() : play(track, queue);
       }}
       aria-label={isActive && isPlaying ? `Pause ${track.title}` : `Play ${track.title}`}
-      className={`flex shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-fuchsia-500 text-white shadow-[0_0_32px_rgba(139,92,246,0.6)] transition-transform duration-300 hover:scale-105 ${dims} ${className}`}
+      className={`flex shrink-0 items-center justify-center rounded-full bg-ink hover:bg-deep-soft text-ivory shadow-[0_2px_14px_rgba(37,39,36,0.14)] transition-transform duration-300 hover:scale-105 ${dims} ${className}`}
     >
       {isActive && isPlaying ? (
         <Pause className={`${iconDims} fill-current`} />

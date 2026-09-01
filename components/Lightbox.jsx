@@ -32,7 +32,7 @@ export default function Lightbox({ images, activeIndex, onClose, onNavigate }) {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[70] flex items-center justify-center bg-black/90 px-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-ink/90 px-4 backdrop-blur-sm"
           role="dialog"
           aria-modal="true"
           aria-label={active.alt}
@@ -43,7 +43,7 @@ export default function Lightbox({ images, activeIndex, onClose, onNavigate }) {
             type="button"
             onClick={onClose}
             aria-label="Close image"
-            className="absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20"
+            className="absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/10 text-ivory transition-colors hover:bg-ivory/20"
           >
             <X className="h-5 w-5" />
           </button>
@@ -57,7 +57,7 @@ export default function Lightbox({ images, activeIndex, onClose, onNavigate }) {
                   onNavigate((activeIndex - 1 + images.length) % images.length);
                 }}
                 aria-label="Previous image"
-                className="absolute left-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:left-6"
+                className="absolute left-3 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/10 text-ivory transition-colors hover:bg-ivory/20 sm:left-6"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -68,7 +68,7 @@ export default function Lightbox({ images, activeIndex, onClose, onNavigate }) {
                   onNavigate((activeIndex + 1) % images.length);
                 }}
                 aria-label="Next image"
-                className="absolute right-3 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white transition-colors hover:bg-white/20 sm:right-6"
+                className="absolute right-3 flex h-10 w-10 items-center justify-center rounded-full bg-ivory/10 text-ivory transition-colors hover:bg-ivory/20 sm:right-6"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>

@@ -3,9 +3,9 @@ const base =
 
 const variants = {
   primary:
-    "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_0_28px_rgba(139,92,246,0.4)] hover:shadow-[0_0_44px_rgba(139,92,246,0.6)] hover:-translate-y-0.5 active:translate-y-0",
+    "bg-ink hover:bg-deep-soft text-ivory shadow-[0_2px_12px_rgba(37,39,36,0.10)] hover:shadow-[0_6px_20px_rgba(37,39,36,0.16)] hover:-translate-y-0.5 active:translate-y-0",
   ghost:
-    "glass text-ink hover:border-violet-500/50 hover:bg-violet-500/5 hover:-translate-y-0.5 active:translate-y-0",
+    "glass border-line text-ink hover:border-stone hover:bg-greige/40 hover:-translate-y-0.5 active:translate-y-0",
 };
 
 export default function Button({

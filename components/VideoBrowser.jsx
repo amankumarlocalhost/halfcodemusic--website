@@ -23,7 +23,7 @@ export default function VideoBrowser() {
             aria-pressed={category === c.id}
             className={`rounded-full px-4 py-2 text-xs font-medium transition-all duration-300 ${
               category === c.id
-                ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]"
+                ? "bg-ink hover:bg-deep-soft text-ivory shadow-[0_2px_10px_rgba(37,39,36,0.10)]"
                 : "glass text-dim hover:text-ink"
             }`}
           >

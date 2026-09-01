@@ -14,7 +14,7 @@ export default function SectionHeading({
   return (
     <Reveal className={`flex max-w-2xl flex-col ${alignClass}`}>
       {eyebrow && (
-        <span className="glass mb-4 inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-xs font-semibold tracking-[0.2em] text-violet-700 uppercase">
+        <span className="glass mb-4 inline-flex items-center gap-2.5 rounded-full px-4 py-1.5 text-xs font-semibold tracking-[0.2em] text-dim uppercase">
           <span className="h-1.5 w-1.5 rounded-full bg-neon" />
           {eyebrow}
         </span>

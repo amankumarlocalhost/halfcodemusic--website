@@ -1,5 +1,6 @@
 import { Inter, Space_Grotesk } from "next/font/google";
 import Loader from "@/components/Loader";
+import InspectGuard from "@/components/InspectGuard";
 import { PlayerProvider } from "@/components/player/PlayerProvider";
 import PlayerBar from "@/components/player/PlayerBar";
 import { site } from "@/lib/site";
@@ -79,7 +80,7 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#faf9fc",
+  themeColor: "#f4f3ee",
   width: "device-width",
   initialScale: 1,
 };
@@ -112,6 +113,16 @@ export default function RootLayout({ children }) {
     <html lang="en" className={`${inter.variable} ${spaceGrotesk.variable} antialiased`}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        {/* Blanks the React DevTools bridge before the app bundle runs, so the
+            component tree cannot be browsed. Inline and first, because it only
+            works if it lands before React registers with the extension. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'var h=window.__REACT_DEVTOOLS_GLOBAL_HOOK__;if(h){h.inject=function(){};h.onCommitFiberRoot=function(){};h.onCommitFiberUnmount=function(){};h.supportsFiber=false;}',
+          }}
+        />
+        <InspectGuard />
         <Loader />
         <PlayerProvider>
           {children}

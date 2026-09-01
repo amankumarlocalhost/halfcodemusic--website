@@ -21,9 +21,9 @@ export default function VideoCard({ video, onOpen }) {
           sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-ink/65 via-line to-transparent" />
         <span className="absolute inset-0 flex items-center justify-center">
-          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-ink shadow-lg transition-transform duration-300 group-hover:scale-110">
+          <span className="flex h-14 w-14 items-center justify-center rounded-full bg-ivory/95 text-ink shadow-lg transition-transform duration-300 group-hover:scale-110">
             <Play className="ml-0.5 h-5 w-5 fill-current" />
           </span>
         </span>

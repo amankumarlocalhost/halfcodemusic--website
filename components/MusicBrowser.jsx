@@ -35,7 +35,7 @@ export default function MusicBrowser({ releases }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search releases..."
             aria-label="Search releases"
-            className="w-full rounded-full bg-transparent py-3 pr-4 pl-11 text-sm text-ink placeholder:text-ink/40 focus:outline-none"
+            className="w-full rounded-full bg-transparent py-3 pr-4 pl-11 text-sm text-ink placeholder:text-ink/50 focus:outline-none"
           />
         </div>
         <div className="flex flex-wrap justify-center gap-2">
@@ -47,7 +47,7 @@ export default function MusicBrowser({ releases }) {
               aria-pressed={genre === g}
               className={`rounded-full px-4 py-2 text-xs font-medium transition-all duration-300 ${
                 genre === g
-                  ? "bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.4)]"
+                  ? "bg-ink hover:bg-deep-soft text-ivory shadow-[0_2px_10px_rgba(37,39,36,0.10)]"
                   : "glass text-dim hover:text-ink"
               }`}
             >

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 import Reveal from "@/components/ui/Reveal";
+import useHydrated from "@/lib/useHydrated";
 import { stats } from "@/data/artist";
 
 /** Counts from 0 to `value` once the number scrolls into view. */
@@ -10,7 +11,8 @@ function Counter({ value, suffix }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const reduceMotion = useReducedMotion();
-  const [display, setDisplay] = useState(reduceMotion ? value : 0);
+  const hydrated = useHydrated();
+  const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     if (!inView || reduceMotion) return;
@@ -22,9 +24,13 @@ function Counter({ value, suffix }) {
     return () => controls.stop();
   }, [inView, value, reduceMotion]);
 
+  // This is rendered text, so it has to start at the server's value and only
+  // jump to the total once hydration is done.
+  const shown = hydrated && reduceMotion ? value : display;
+
   return (
     <span ref={ref}>
-      {display}
+      {shown}
       {suffix}
     </span>
   );
@@ -39,7 +45,7 @@ export default function Stats() {
             {stats.map(({ label, value, suffix }) => (
               <motion.div
                 key={label}
-                whileHover={{ backgroundColor: "rgba(139,92,246,0.08)" }}
+                whileHover={{ backgroundColor: "rgba(216,216,207,0.45)" }}
                 className="flex flex-col items-center gap-2 px-6 py-10 text-center"
               >
                 <span className="font-display text-4xl font-bold tracking-tight sm:text-5xl">

@@ -15,10 +15,10 @@ export default function SocialCard({ platform }) {
       rel="noopener noreferrer"
       whileHover={{ y: -6 }}
       transition={{ type: "spring", stiffness: 320, damping: 18 }}
-      className="glass group flex flex-col items-center gap-4 rounded-3xl px-6 py-8 text-center transition-colors duration-300 hover:border-violet-500/50 hover:bg-violet-500/5"
+      className="glass group flex flex-col items-center gap-4 rounded-3xl px-6 py-8 text-center transition-colors duration-300 hover:border-stone hover:bg-greige/40"
     >
-      <span className="glass flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-300 group-hover:border-violet-500/50 group-hover:shadow-[0_0_32px_rgba(124,58,237,0.25)]">
-        <Icon className="h-6 w-6 text-ink/60 transition-colors duration-300 group-hover:text-violet-600" />
+      <span className="glass flex h-16 w-16 items-center justify-center rounded-2xl transition-all duration-300 group-hover:border-stone group-hover:shadow-[0_4px_16px_rgba(37,39,36,0.08)]">
+        <Icon className="h-6 w-6 text-ink/60 transition-colors duration-300 group-hover:text-ink" />
       </span>
       <span>
         <span className="block font-display font-semibold text-ink">{platform.label}</span>

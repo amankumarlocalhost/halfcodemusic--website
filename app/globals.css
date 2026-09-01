@@ -1,12 +1,33 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Premium light theme — white / soft lavender with violet + cyan accents */
-  --color-paper: #faf9fc;
-  --color-ink: #18181f;
-  --color-dim: #5b5b68;
-  --color-accent: #7c3aed;
-  --color-neon: #0891b2;
+  /* Minimal luxury theme — ivory / greige / stone with a muted sage accent */
+
+  /* Surfaces */
+  --color-paper: #f4f3ee;      /* primary background */
+  --color-surface: #e8e8e1;    /* secondary background */
+  --color-card: #f8f7f3;       /* card background */
+  --color-ivory: #faf9f5;      /* warm ivory */
+  --color-greige: #d8d8cf;     /* soft greige */
+  --color-stone: #b8b8ae;      /* stone gray */
+  --color-sage: #c9cec5;       /* muted sage */
+
+  /* Text */
+  --color-ink: #252724;        /* primary / heading text */
+  --color-dim: #666962;        /* secondary text */
+  --color-muted: #858980;      /* muted text */
+
+  /* Lines + dark surfaces */
+  --color-line: #d9d9d1;       /* borders */
+  --color-deep: #292b28;       /* dark section */
+  --color-deep-soft: #3a3c38;  /* dark section secondary */
+
+  /* Accents + states */
+  --color-accent: #292b28;     /* primary accent — charcoal */
+  --color-neon: #8a9384;       /* secondary accent — deep muted sage */
+  --color-success: #5f6d59;
+  --color-error: #8c5a50;
+
   --font-sans: var(--font-inter);
   --font-display: var(--font-space-grotesk);
 }
@@ -21,39 +42,43 @@ html {
 
 body {
   background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(124, 58, 237, 0.1), transparent 70%),
-    #faf9fc;
-  color: #18181f;
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(201, 206, 197, 0.55), transparent 70%),
+    #f4f3ee;
+  color: #252724;
   font-family: var(--font-inter), system-ui, sans-serif;
   overflow-x: hidden;
 }
 
 ::selection {
-  background: rgba(124, 58, 237, 0.3);
-  color: #18181f;
+  background: rgba(184, 184, 174, 0.45);
+  color: #252724;
 }
 
 ::-webkit-scrollbar {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #f0eff5;
+  background: #e8e8e1;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(124, 58, 237, 0.35);
+  background: rgba(184, 184, 174, 0.9);
   border-radius: 8px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(124, 58, 237, 0.6);
+  background: rgba(102, 105, 98, 0.7);
 }
 
-/* Frosted-glass surface used for cards, nav and menus */
-.glass {
-  border: 1px solid rgba(24, 24, 31, 0.08);
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  box-shadow: 0 4px 24px rgba(24, 24, 31, 0.05);
+/* Frosted-glass surface used for cards, nav and menus.
+   Layered so colour utilities (hover:border-stone, hover:bg-greige/40, ...)
+   can override the base surface. */
+@layer components {
+  .glass {
+    border: 1px solid rgba(37, 39, 36, 0.09);
+    background: rgba(250, 249, 245, 0.72);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 2px 16px rgba(37, 39, 36, 0.04);
+  }
 }
 
 /* Sweeping light across gradient headline text */
@@ -66,11 +91,11 @@ body {
 .text-shimmer {
   background-image: linear-gradient(
     110deg,
-    #18181f 20%,
-    #7c3aed 35%,
-    #c026d3 50%,
-    #4f46e5 65%,
-    #18181f 80%
+    #252724 20%,
+    #666962 35%,
+    #b8b8ae 50%,
+    #6f7d68 65%,
+    #252724 80%
   );
   background-size: 200% auto;
   -webkit-background-clip: text;

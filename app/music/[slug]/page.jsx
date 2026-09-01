@@ -73,9 +73,9 @@ export default async function ReleasePage({ params }) {
           <Reveal className="relative mx-auto w-full max-w-lg">
             <div
               aria-hidden
-              className="absolute inset-0 scale-95 rounded-3xl bg-gradient-to-br from-violet-500/40 to-cyan-400/25 blur-[90px]"
+              className="absolute inset-0 scale-95 rounded-3xl bg-gradient-to-br from-sage/70 to-greige/60 blur-[90px]"
             />
-            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-violet-400/50 via-ink/10 to-cyan-400/40 p-px shadow-2xl shadow-violet-300/40">
+            <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-greige via-stone/70 to-sage p-px shadow-[0_18px_50px_rgba(37,39,36,0.08)]">
               <Image
                 src={release.cover}
                 alt={`${release.title} — cover artwork`}
@@ -90,9 +90,9 @@ export default async function ReleasePage({ params }) {
 
           <div>
             <Reveal>
-              <p className="text-xs font-semibold tracking-[0.2em] text-violet-700 uppercase">{release.genre}</p>
+              <p className="text-xs font-semibold tracking-[0.2em] text-dim uppercase">{release.genre}</p>
               <h1 className="font-display mt-3 text-4xl font-bold tracking-tight sm:text-5xl">{release.title}</h1>
-              <p className="mt-2 text-lg font-medium text-violet-700/80">{release.subtitle}</p>
+              <p className="mt-2 text-lg font-medium text-dim">{release.subtitle}</p>
               <p className="mt-1 text-sm text-dim">
                 {release.artist} · {new Date(release.releaseDate).getFullYear()}
               </p>
@@ -117,7 +117,7 @@ export default async function ReleasePage({ params }) {
                     href={release.youtubeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2.5 rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-6 py-3.5 text-sm font-semibold text-white shadow-[0_0_28px_rgba(139,92,246,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_44px_rgba(139,92,246,0.55)]"
+                    className="inline-flex items-center gap-2.5 rounded-full bg-ink hover:bg-deep-soft px-6 py-3.5 text-sm font-semibold text-ivory shadow-[0_2px_12px_rgba(37,39,36,0.10)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_20px_rgba(37,39,36,0.16)]"
                   >
                     <YoutubeIcon className="h-5 w-5" />
                     Watch on YouTube
@@ -128,8 +128,8 @@ export default async function ReleasePage({ params }) {
 
             {release.credits?.length > 0 && (
               <Reveal delay={0.3}>
-                <div className="mt-10 border-t border-ink/10 pt-6">
-                  <h2 className="text-xs font-semibold tracking-[0.15em] text-ink/40 uppercase">Credits</h2>
+                <div className="mt-10 border-t border-line pt-6">
+                  <h2 className="text-xs font-semibold tracking-[0.15em] text-ink/55 uppercase">Credits</h2>
                   <ul className="mt-3 space-y-1.5">
                     {release.credits.map((credit) => (
                       <li key={credit.role} className="text-sm text-dim">
@@ -142,8 +142,8 @@ export default async function ReleasePage({ params }) {
             )}
 
             <Reveal delay={0.35}>
-              <div className="mt-10 border-t border-ink/10 pt-6">
-                <h2 className="text-xs font-semibold tracking-[0.15em] text-ink/40 uppercase">Lyrics</h2>
+              <div className="mt-10 border-t border-line pt-6">
+                <h2 className="text-xs font-semibold tracking-[0.15em] text-ink/55 uppercase">Lyrics</h2>
                 {release.lyrics ? (
                   <p className="mt-3 whitespace-pre-line text-sm leading-relaxed text-dim">{release.lyrics}</p>
                 ) : (

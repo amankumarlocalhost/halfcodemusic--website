@@ -42,3 +42,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# raw hero frame source (encoded output lives in public/hero-frames)
+/video2_frames_30fps/
+
+# raw portrait hero frame source (encoded output lives in public/hero-frames)
+/frames/

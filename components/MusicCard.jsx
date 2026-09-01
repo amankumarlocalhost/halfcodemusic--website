@@ -20,7 +20,7 @@ export default function MusicCard({ release, queue = [], priority = false }) {
             sizes="(min-width: 1024px) 22vw, (min-width: 640px) 40vw, 90vw"
             className="object-cover transition-transform duration-700 group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink/65 via-ink/0 to-ink/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
         </div>
         <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
           <span className="pointer-events-auto">
@@ -31,7 +31,7 @@ export default function MusicCard({ release, queue = [], priority = false }) {
 
       <div className="mt-4">
         <h3 className="truncate font-display text-base font-semibold text-ink">
-          <Link href={`/music/${release.slug}`} className="hover:text-violet-700">
+          <Link href={`/music/${release.slug}`} className="hover:text-dim">
             {release.title}
           </Link>
         </h3>

@@ -8,10 +8,10 @@ const icons = { youtube: YoutubeIcon, instagram: InstagramIcon };
 
 export default function Footer() {
   return (
-    <footer className="relative border-t border-ink/10 px-6 pt-14 pb-8">
+    <footer className="relative border-t border-line px-6 pt-14 pb-8">
       <div
         aria-hidden
-        className="absolute inset-x-0 top-0 mx-auto h-px w-2/3 bg-gradient-to-r from-transparent via-violet-500/50 to-transparent"
+        className="absolute inset-x-0 top-0 mx-auto h-px w-2/3 bg-gradient-to-r from-transparent via-stone to-transparent"
       />
 
       <div className="mx-auto max-w-6xl">
@@ -35,7 +35,7 @@ export default function Footer() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={platform.label}
-                    className="glass flex h-10 w-10 items-center justify-center rounded-full text-ink/60 transition-all duration-300 hover:border-violet-500/50 hover:text-violet-600"
+                    className="glass flex h-10 w-10 items-center justify-center rounded-full text-ink/60 transition-all duration-300 hover:border-stone hover:text-ink"
                   >
                     <Icon className="h-4.5 w-4.5" />
                   </a>
@@ -45,7 +45,7 @@ export default function Footer() {
           </div>
 
           <nav aria-label="Footer">
-            <p className="mb-3 text-center text-xs font-semibold tracking-[0.15em] text-ink/40 uppercase sm:text-left">
+            <p className="mb-3 text-center text-xs font-semibold tracking-[0.15em] text-ink/55 uppercase sm:text-left">
               Explore
             </p>
             <ul className="flex flex-col items-center gap-2 sm:items-start">
@@ -65,7 +65,7 @@ export default function Footer() {
           </nav>
 
           <nav aria-label="Legal">
-            <p className="mb-3 text-center text-xs font-semibold tracking-[0.15em] text-ink/40 uppercase sm:text-left">
+            <p className="mb-3 text-center text-xs font-semibold tracking-[0.15em] text-ink/55 uppercase sm:text-left">
               Legal
             </p>
             <ul className="flex flex-col items-center gap-2 sm:items-start">
@@ -80,7 +80,7 @@ export default function Footer() {
           </nav>
         </div>
 
-        <p className="mt-10 border-t border-ink/5 pt-6 text-center text-xs text-ink/40">
+        <p className="mt-10 border-t border-line/60 pt-6 text-center text-xs text-ink/55">
           &copy; {new Date().getFullYear()} {site.name}. All rights reserved.
         </p>
       </div>

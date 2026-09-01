@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import useHydrated from "@/lib/useHydrated";
 
 /**
  * Premium intro overlay: brand mark + equalizer pulse, then fades away.
@@ -10,6 +11,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
  */
 export default function Loader() {
   const reduceMotion = useReducedMotion();
+  const hydrated = useHydrated();
   const [done, setDone] = useState(false);
 
   useEffect(() => {
@@ -17,7 +19,10 @@ export default function Loader() {
     return () => clearTimeout(t);
   }, []);
 
-  if (reduceMotion) return null;
+  // Gated on hydration: useReducedMotion is false on the server but true on the
+  // client for these users, so branching the tree on it during the hydrating
+  // render would leave the server HTML and client tree a node out of step.
+  if (hydrated && reduceMotion) return null;
 
   return (
     <AnimatePresence>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -9,14 +9,37 @@ import { Menu, X } from "lucide-react";
 import { navLinks } from "@/lib/site";
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   const [prevPathname, setPrevPathname] = useState(pathname);
 
+  const lastY = useRef(0);
+  const ticking = useRef(false);
+
+  // One passive listener, coalesced into a single rAF, and setHidden is only
+  // ever called with a value that can change — React bails out on a repeat, so
+  // scrolling does not re-render the nav.
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
+    lastY.current = window.scrollY;
+
+    const onScroll = () => {
+      if (ticking.current) return;
+      ticking.current = true;
+
+      requestAnimationFrame(() => {
+        const y = window.scrollY;
+        const delta = y - lastY.current;
+
+        // Ignore sub-pixel jitter and rubber-banding at the very top.
+        if (Math.abs(delta) > 6) {
+          setHidden(delta > 0 && y > 96);
+          lastY.current = y;
+        }
+        ticking.current = false;
+      });
+    };
+
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -30,12 +53,13 @@ export default function Navbar() {
 
   return (
     <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled || open ? "glass border-x-0 border-t-0" : "border-b border-transparent"
-      }`}
+      // Transparent overlay — the hero runs full-bleed behind it.
+      // Slides out of the way on scroll down, back in on scroll up. The open
+      // mobile menu pins it visible so it can always be dismissed.
+      initial={{ y: "-30%", opacity: 0 }}
+      animate={{ y: hidden && !open ? "-100%" : "0%", opacity: 1 }}
+      transition={{ duration: 0.35, ease: [0.21, 0.47, 0.32, 0.98] }}
+      className="fixed inset-x-0 top-0 z-50 bg-transparent"
     >
       <nav className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 sm:h-20">
         <Link href="/" className="group flex items-center gap-2.5 font-display text-lg font-bold tracking-tight">
@@ -44,7 +68,7 @@ export default function Navbar() {
             alt=""
             width={36}
             height={36}
-            className="h-9 w-9 rounded-xl shadow-[0_0_20px_rgba(139,92,246,0.4)] transition-shadow duration-300 group-hover:shadow-[0_0_32px_rgba(34,211,238,0.5)]"
+            className="h-9 w-9 rounded-xl shadow-[0_2px_10px_rgba(37,39,36,0.10)] transition-shadow duration-300 group-hover:shadow-[0_4px_16px_rgba(37,39,36,0.16)]"
             priority
           />
           <span>
@@ -70,7 +94,7 @@ export default function Navbar() {
           <li>
             <Link
               href="/music"
-              className="rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-2 text-sm font-semibold text-white shadow-[0_0_20px_rgba(124,58,237,0.3)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_32px_rgba(124,58,237,0.45)]"
+              className="rounded-full bg-ink hover:bg-deep-soft px-5 py-2 text-sm font-semibold text-ivory shadow-[0_2px_10px_rgba(37,39,36,0.10)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_rgba(37,39,36,0.16)]"
             >
               Listen Now
             </Link>
@@ -122,7 +146,7 @@ export default function Navbar() {
               <li className="pt-2">
                 <Link
                   href="/music"
-                  className="block rounded-full bg-gradient-to-r from-violet-600 to-fuchsia-600 px-5 py-3 text-center font-semibold text-white shadow-[0_0_20px_rgba(124,58,237,0.3)]"
+                  className="block rounded-full bg-ink hover:bg-deep-soft px-5 py-3 text-center font-semibold text-ivory shadow-[0_2px_10px_rgba(37,39,36,0.10)]"
                 >
                   Listen Now
                 </Link>
