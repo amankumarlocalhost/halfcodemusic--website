@@ -26,6 +26,16 @@ const nextConfig = {
           { key: "Content-Type", value: "application/octet-stream" },
         ],
       },
+      {
+        // Same reasoning for the gallery packs: content-hashed filenames, so
+        // they are immutable, and a deliberately generic content type so the
+        // response never announces itself as a bundle of photographs.
+        source: "/_gal/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          { key: "Content-Type", value: "application/octet-stream" },
+        ],
+      },
     ];
   },
 };
