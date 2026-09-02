@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
  * Path version. Must match VERSION in components/Hero.jsx — it is what lets
  * next.config.mjs serve these frames as permanently immutable.
  */
-export const VERSION = "v2";
+export const VERSION = "v3";
 
 /**
  * Salt for the filename derivation. Bump it to rotate every filename at once;

@@ -1,9 +1,10 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { useReducedMotion } from "framer-motion";
+import { useMotionValue, useReducedMotion } from "framer-motion";
 import useFrameSequence, { coarseFrames } from "@/components/hero/useFrameSequence";
 import useMediaQuery from "@/lib/useMediaQuery";
+import HeroMobileOverlay from "@/components/hero/HeroMobileOverlay";
 import frameNames from "@/lib/heroFrames.json";
 
 /**
@@ -66,6 +67,10 @@ export default function Hero() {
   const canvasRef = useRef(null);
   const posterRef = useRef(null);
 
+  // Scroll position of the sequence, 0–1. Only the narrow-screen content layer
+  // reads it; on desktop nothing subscribes, so this stays inert.
+  const progress = useMotionValue(0);
+
   // null until hydration, so nothing is fetched before the orientation is
   // known — and a rotated phone re-resolves onto the matching set.
   const isPortrait = useMediaQuery("(orientation: portrait)");
@@ -89,6 +94,7 @@ export default function Hero() {
     trackRef,
     source,
     posterRef,
+    progress,
     staticProgress: reduceMotion ? 0 : null,
   });
 
@@ -137,6 +143,9 @@ export default function Hero() {
           />
         </picture>
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+
+        {/* Narrow screens only — `lg:hidden` keeps it out of the desktop layout. */}
+        <HeroMobileOverlay progress={progress} animate={!reduceMotion} />
       </div>
     </section>
   );

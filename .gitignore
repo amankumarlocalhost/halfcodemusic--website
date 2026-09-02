@@ -48,3 +48,6 @@ next-env.d.ts
 
 # raw portrait hero frame source (encoded output lives in public/hero-frames)
 /frames/
+
+# raw mobile frame source, consolidated from the batch folders
+/mobileframes/

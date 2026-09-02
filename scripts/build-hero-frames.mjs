@@ -34,8 +34,8 @@ const SOURCES = [
   },
   {
     label: "portrait",
-    dir: "frames",
-    ext: ".jpg",
+    dir: "mobileframes",
+    ext: ".png",
     sets: [{ dir: "p720", width: 720, quality: 66, effort: 6 }],
   },
 ];
