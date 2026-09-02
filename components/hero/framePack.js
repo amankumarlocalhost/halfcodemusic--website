@@ -30,14 +30,19 @@ function maskKey() {
  * payload carries its real frame index in the header's index table, so
  * `onFrame` always reports the true position.
  *
- * Frames are decoded into <img> elements via blob URLs rather than
- * ImageBitmaps. That is deliberate: an ImageBitmap is retained until it is
- * explicitly closed, and 600 of them at 1600x900 would pin roughly 3 GB of
- * decoded pixels. Browsers evict <img> bitmaps under pressure and re-decode on
- * demand, which is what keeps this affordable on a phone.
+ * This reader does NOT decode. It hands out the raw WebP bytes for each frame
+ * and lets the caller decide when to turn them into pixels.
+ *
+ * That split matters for more than tidiness. The previous version decoded here,
+ * into <img> elements via URL.createObjectURL. Every one of those blob URLs
+ * shows up in the DevTools Network panel as its own entry, with a working
+ * Preview tab — so a ~600 frame sequence produced ~600 inspectable image
+ * requests and undid the whole point of shipping one opaque binary. Bytes in,
+ * bytes out: the caller decodes with createImageBitmap, which never mints a URL
+ * and never appears in the Network panel.
  *
  * @param {{url: string, frameCount: number}} manifest
- * @param {{onFrame: (index: number, img: HTMLImageElement) => void, signal?: AbortSignal}} options
+ * @param {{onFrame: (index: number, bytes: Uint8Array) => void, signal?: AbortSignal}} options
  */
 export async function loadFramePack(manifest, { onFrame, signal }) {
   const key = maskKey();
@@ -63,10 +68,6 @@ export async function loadFramePack(manifest, { onFrame, signal }) {
   let indices = null;
   let emitted = 0;
 
-  // Decodes are awaited one at a time; a fast connection would otherwise queue
-  // hundreds of concurrent decodes and stall the main thread.
-  let decodeChain = Promise.resolve();
-
   const view = () => new DataView(buffer.buffer, buffer.byteOffset, buffer.byteLength);
 
   const tryParseHeader = () => {
@@ -90,33 +91,21 @@ export async function loadFramePack(manifest, { onFrame, signal }) {
     }
   };
 
-  /** Decode every payload that has fully arrived, in stream order. */
+  /**
+   * Hand over every payload that has fully arrived, in stream order.
+   *
+   * `buffer.slice` copies, so each frame owns its bytes and the whole pack
+   * buffer is not kept alive by them. At roughly 20 KB a frame this is a few
+   * MB for the entire sequence — cheap enough to hold encoded indefinitely,
+   * which is what lets the decoded-pixel cache stay small.
+   */
   const drain = () => {
     if (!offsets) return;
 
     while (emitted < frameCount && offsets[emitted] + lengths[emitted] <= filled) {
       const slot = emitted++;
-      const bytes = buffer.slice(offsets[slot], offsets[slot] + lengths[slot]);
-      const frameIndex = indices[slot];
-
-      decodeChain = decodeChain.then(async () => {
-        if (signal?.aborted) return;
-        const url = URL.createObjectURL(new Blob([bytes], { type: "image/webp" }));
-        const img = new Image();
-        img.decoding = "async";
-        img.src = url;
-        try {
-          await img.decode();
-          if (signal?.aborted) {
-            URL.revokeObjectURL(url);
-            return;
-          }
-          onFrame(frameIndex, img);
-        } catch {
-          // A payload that will not decode just leaves a gap in the sequence.
-          URL.revokeObjectURL(url);
-        }
-      });
+      if (signal?.aborted) return;
+      onFrame(indices[slot], buffer.slice(offsets[slot], offsets[slot] + lengths[slot]));
     }
   };
 
@@ -144,6 +133,4 @@ export async function loadFramePack(manifest, { onFrame, signal }) {
     tryParseHeader();
     drain();
   }
-
-  await decodeChain;
 }

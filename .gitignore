@@ -51,3 +51,6 @@ next-env.d.ts
 
 # raw mobile frame source, consolidated from the batch folders
 /mobileframes/
+
+# raw gallery photographs (packed output lives in public/_gal)
+/gallery-src/
