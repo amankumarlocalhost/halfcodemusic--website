@@ -13,17 +13,17 @@ const nextConfig = {
   async headers() {
     return [
       {
-        // Hero frames are immutable: the path carries a version segment, so a
-        // re-encode ships under a new URL rather than mutating these. Without
-        // this Next serves public/ as `max-age=0`, which makes every repeat
-        // visit revalidate all 600 frames — hundreds of round trips before the
-        // animation can run.
-        source: "/hero-frames/:path*",
+        // The hero pack is immutable: its filename carries a content hash, so a
+        // rebuild ships under a new URL rather than mutating this one. Without
+        // this Next serves public/ as `max-age=0` and every repeat visit
+        // re-downloads the whole animation.
+        //
+        // The generic content type is deliberate — nothing in the response
+        // should hint that these bytes are frames.
+        source: "/_seq/:path*",
         headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+          { key: "Content-Type", value: "application/octet-stream" },
         ],
       },
     ];

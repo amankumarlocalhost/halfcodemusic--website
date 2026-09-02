@@ -122,6 +122,17 @@ export default function RootLayout({ children }) {
               'var h=window.__REACT_DEVTOOLS_GLOBAL_HOOK__;if(h){h.inject=function(){};h.onCommitFiberRoot=function(){};h.onCommitFiberUnmount=function(){};h.supportsFiber=false;}',
           }}
         />
+        {/* The hero is scroll-scrubbed, so restoring the previous scroll on a
+            reload drops you into the middle of the animation. Opting out here,
+            inline and before hydration, beats doing it in an effect — the
+            browser restores scroll early, and this runs before it can. Only on
+            the home page; every other route keeps normal restoration. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              'if(location.pathname==="/"&&"scrollRestoration" in history){history.scrollRestoration="manual";}',
+          }}
+        />
         <InspectGuard />
         <Loader />
         <PlayerProvider>

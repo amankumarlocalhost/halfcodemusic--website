@@ -76,12 +76,14 @@ export default function InspectGuard() {
     };
 
     document.addEventListener("contextmenu", onContextMenu);
-    document.addEventListener("keydown", onKeyDown);
+    // Capture phase, so the combination is seen before any component handler
+    // further down the tree can act on it.
+    document.addEventListener("keydown", onKeyDown, true);
     document.addEventListener("dragstart", onDragStart);
 
     return () => {
       document.removeEventListener("contextmenu", onContextMenu);
-      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("keydown", onKeyDown, true);
       document.removeEventListener("dragstart", onDragStart);
     };
   }, []);

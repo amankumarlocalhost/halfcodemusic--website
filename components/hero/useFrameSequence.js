@@ -1,53 +1,12 @@
 "use client";
 
 import { useEffect } from "react";
+import { loadFramePack } from "@/components/hero/framePack";
 
 const clamp = (v, min, max) => (v < min ? min : v > max ? max : v);
 
 /** Width of the source strip stretched outwards to fill the bare edges. */
 const EDGE = 16;
-
-/**
- * The coarsest pass of the ladder. These same indices are preloaded from the
- * server-rendered HTML (see components/Hero.jsx), so by the time this hook
- * runs they are already in the HTTP cache and resolve instantly.
- */
-export const COARSE_STRIDE = 64;
-
-/**
- * Progressive load ladder: first and last frame, then a coarse pass over the
- * whole timeline, then repeatedly halving the stride.
- *
- * Starting at stride 64 rather than deep in the sequence matters — roughly ten
- * frames spread evenly is enough that *any* scroll position has something to
- * show within the first moments, and every later pass halves the gap. Loading
- * in playback order instead would leave the back half blank for seconds.
- */
-function buildLoadOrder(count) {
-  const order = [];
-  const queued = new Uint8Array(count);
-  const push = (i) => {
-    if (i >= 0 && i < count && !queued[i]) {
-      queued[i] = 1;
-      order.push(i);
-    }
-  };
-
-  push(0);
-  push(count - 1);
-  for (let stride = COARSE_STRIDE; stride >= 1; stride >>= 1) {
-    for (let i = 0; i < count; i += stride) push(i);
-  }
-  return order;
-}
-
-/** Frames in the coarse pass — preloaded from the HTML, so fetched at high priority. */
-export function coarseFrames(count) {
-  const list = [];
-  for (let i = 0; i < count; i += COARSE_STRIDE) list.push(i);
-  if (list[list.length - 1] !== count - 1) list.push(count - 1);
-  return list;
-}
 
 /**
  * Drives a <canvas> through an image sequence from scroll position.
@@ -64,7 +23,8 @@ export function coarseFrames(count) {
 export default function useFrameSequence({
   canvasRef,
   trackRef,
-  // { frameCount, srcFor } — or null while the orientation is still unknown.
+  // A set from lib/seqManifest.json — or null while the orientation is still
+  // unknown, which keeps us from downloading the wrong pack before hydration.
   source,
   posterRef,
   progress,
@@ -76,7 +36,7 @@ export default function useFrameSequence({
     const track = trackRef.current;
     if (!canvas || !source) return;
 
-    const { frameCount, srcFor } = source;
+    const { frameCount } = source;
 
     // alpha:true so the poster <img> shows through until the first frame paints.
     const ctx = canvas.getContext("2d");
@@ -125,45 +85,26 @@ export default function useFrameSequence({
 
     /* ---------------------------------------------------------------- load */
 
-    const order = buildLoadOrder(frameCount);
-    let cursor = 0;
+    // The whole sequence arrives as one masked binary rather than as ~600
+    // separate image requests. Frames stream out of it coarse-to-fine across
+    // the timeline, already decoded, so this side of the hook only has to file
+    // them away — the drawing below is unchanged.
+    const abort = new AbortController();
 
-    // The coarse pass is what makes the animation usable, so it competes for
-    // bandwidth; everything after it is refinement and must not hold up the
-    // rest of the page. `position` tracks how far down the ladder we are.
-    const coarseCount = coarseFrames(frameCount).length;
-
-    const loadNext = async () => {
-      while (!disposed && cursor < order.length) {
-        const position = cursor;
-        const index = order[cursor++];
-        if (ready[index]) continue;
-
-        const img = new Image();
-        img.decoding = "async";
-        // Priority hints keep the long tail of frames from queueing ahead of
-        // fonts, scripts and the rest of the page's own resources.
-        img.fetchPriority = position < coarseCount ? "high" : "low";
-        img.src = srcFor(index);
-
-        try {
-          // Decode here rather than letting the first drawImage trigger it.
-          // A synchronous decode inside the rAF loop is a dropped frame; doing
-          // it during loading keeps the scrub path free of decode work.
-          await img.decode();
-        } catch {
-          continue; // a failed frame just leaves a gap; nearest() covers it
-        }
-        if (disposed) return;
-
+    loadFramePack(source, {
+      signal: abort.signal,
+      onFrame: (index, img) => {
+        if (disposed || index >= frameCount) return;
         frames[index] = img;
         ready[index] = 1;
         // The first frame reveals the source resolution, which caps the
         // backing store. Any new frame may also beat what is on screen.
         if (index === 0) resize();
         needsPaint = true;
-      }
-    };
+      },
+    }).catch(() => {
+      // A failed pack leaves the poster in place rather than a blank hero.
+    });
 
     /* ---------------------------------------------------------------- paint */
 
@@ -279,10 +220,6 @@ export default function useFrameSequence({
 
     /* ---------------------------------------------------------------- setup */
 
-    // HTTP/2 multiplexes, so a wider gate simply lets the browser schedule more
-    // of the ladder at once; priority hints above keep it polite.
-    for (let i = 0; i < 10; i++) loadNext();
-
     resize();
     progress?.set(current);
 
@@ -292,10 +229,13 @@ export default function useFrameSequence({
 
     return () => {
       disposed = true;
+      abort.abort();
       cancelAnimationFrame(rafId);
       observer.disconnect();
+      // Every frame is backed by a blob: URL, which the document holds until
+      // it is explicitly released.
       for (const img of frames) {
-        if (img) img.onload = img.onerror = null;
+        if (img?.src?.startsWith("blob:")) URL.revokeObjectURL(img.src);
       }
     };
   }, [canvasRef, trackRef, posterRef, source, progress, staticProgress]);

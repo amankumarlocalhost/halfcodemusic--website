@@ -1,54 +1,24 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useMotionValue, useReducedMotion } from "framer-motion";
-import useFrameSequence, { coarseFrames } from "@/components/hero/useFrameSequence";
+import useFrameSequence from "@/components/hero/useFrameSequence";
 import useMediaQuery from "@/lib/useMediaQuery";
 import HeroMobileOverlay from "@/components/hero/HeroMobileOverlay";
-import frameNames from "@/lib/heroFrames.json";
+import seqManifest from "@/lib/seqManifest.json";
 
 /**
- * Frame sets live in public/hero-frames — regenerate with
- * scripts/build-hero-frames.mjs, which also prints these counts.
+ * Each set is one packed binary — regenerate with `npm run pack:frames`.
  *
  * Portrait screens get a separately shot 9:16 cut of the same sequence, so the
- * subject fills a phone properly instead of sitting in a letterboxed strip. It
- * is a different edit, hence the different frame count.
+ * subject fills a phone properly instead of sitting in a letterboxed strip; it
+ * is a different edit, hence its own frame count. The manifest carries the
+ * count, dimensions and inline poster for each, so nothing is hardcoded here.
  */
-const SETS = {
-  portrait: { dir: "p720", frameCount: 589, media: "(orientation: portrait)" },
-  landscape: {
-    dir: "w1600",
-    frameCount: 600,
-    media: "(orientation: landscape) and (min-width: 900px)",
-  },
-  landscapeNarrow: {
-    dir: "w960",
-    frameCount: 600,
-    media: "(orientation: landscape) and (max-width: 899px)",
-  },
-};
+const { portrait, landscape, landscapeNarrow } = seqManifest.sets;
 
-/** Landscape below this width takes the lighter set. Matches the poster's media query. */
+/** Landscape below this width takes the lighter pack. Matches the poster's media query. */
 const NARROW = 900;
-
-/** Fixed width of each hashed name in the map. Matches NAME_LENGTH in scripts/frame-names.mjs. */
-const NAME_LENGTH = 8;
-
-/**
- * Frames are stored under hashed filenames rather than a numbered sequence, so
- * the request list gives away no playback order. `frameNames` is a build-time
- * map of index -> name, compiled into the bundle: it carries no request of its
- * own, and being generated alongside the files it can never drift out of sync.
- *
- * Each set's names are one concatenated fixed-width string, so the whole map is
- * ~14 KB rather than 1,789 JSON entries.
- */
-const frameUrl = (dir, index) => {
-  const start = index * NAME_LENGTH;
-  const name = frameNames.names[dir].slice(start, start + NAME_LENGTH);
-  return `/hero-frames/${frameNames.version}/${dir}/${name}.webp`;
-};
 
 /**
  * Scroll-scrubbed hero.
@@ -71,22 +41,28 @@ export default function Hero() {
   // reads it; on desktop nothing subscribes, so this stays inert.
   const progress = useMotionValue(0);
 
+  // A reload should always open on frame 0. The inline script in the layout
+  // turns scroll restoration off before the browser can act on it; this is the
+  // belt and braces for browsers that restore before hydration anyway. An
+  // explicit #anchor is honoured — that is a deliberate jump, not a restore.
+  useEffect(() => {
+    if (!window.location.hash) window.scrollTo(0, 0);
+
+    return () => {
+      // Hand restoration back when leaving, so long pages elsewhere still
+      // return you to where you were.
+      if ("scrollRestoration" in history) history.scrollRestoration = "auto";
+    };
+  }, []);
+
   // null until hydration, so nothing is fetched before the orientation is
   // known — and a rotated phone re-resolves onto the matching set.
   const isPortrait = useMediaQuery("(orientation: portrait)");
 
   const source = useMemo(() => {
     if (isPortrait === null) return null;
-    const set = isPortrait
-      ? SETS.portrait
-      : window.innerWidth < NARROW
-        ? SETS.landscapeNarrow
-        : SETS.landscape;
-
-    return {
-      frameCount: set.frameCount,
-      srcFor: (index) => frameUrl(set.dir, index),
-    };
+    if (isPortrait) return portrait;
+    return window.innerWidth < NARROW ? landscapeNarrow : landscape;
   }, [isPortrait]);
 
   useFrameSequence({
@@ -109,40 +85,27 @@ export default function Hero() {
       {/* Edge to edge and top to bottom: the stage is the whole viewport, and
           the transparent navbar overlays it rather than sitting above it. */}
       <div className="sticky top-0 h-svh overflow-hidden bg-paper">
-        {/* Paints before hydration so the first frame is the hero immediately,
-            and stays behind the canvas as its opening image. object-contain
-            matches the canvas fit exactly, so the handover is invisible. */}
-        {/* Server-rendered preloads. The browser's preload scanner picks these
-            up while it is still parsing the HTML, so the coarse pass is already
-            in cache by the time React has hydrated and the hook asks for it —
-            worth well over a second on a cold load. `media` keeps each device
-            to the one set it will actually use. */}
-        {Object.values(SETS).flatMap((set) =>
-          coarseFrames(set.frameCount).map((index) => (
-            <link
-              key={`${set.dir}-${index}`}
-              rel="preload"
-              as="image"
-              type="image/webp"
-              media={set.media}
-              href={frameUrl(set.dir, index)}
-            />
-          ))
-        )}
-
+        {/* Inline first paint. These are data: URIs from the manifest, so the
+            hero is never blank while the pack streams and they cost no request
+            of their own. object-contain matches the canvas fit exactly, so the
+            handover to the canvas is invisible. */}
         <picture>
-          <source media="(orientation: portrait)" srcSet={frameUrl(SETS.portrait.dir, 0)} />
-          <source media={`(max-width: ${NARROW - 1}px)`} srcSet={frameUrl(SETS.landscapeNarrow.dir, 0)} />
+          <source media="(orientation: portrait)" srcSet={portrait.poster} />
+          <source media={`(max-width: ${NARROW - 1}px)`} srcSet={landscapeNarrow.poster} />
           <img
             ref={posterRef}
-            src={frameUrl(SETS.landscape.dir, 0)}
+            src={landscape.poster}
             alt=""
             fetchPriority="high"
             decoding="async"
             className="absolute inset-0 h-full w-full object-contain"
           />
         </picture>
-        <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full"
+        />
 
         {/* Narrow screens only — `lg:hidden` keeps it out of the desktop layout. */}
         <HeroMobileOverlay progress={progress} animate={!reduceMotion} />
